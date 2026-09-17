@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Octokit } from '@octokit/rest';
 
+// Standard CORS headers
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export const runtime = "edge";
 
 
@@ -105,7 +112,7 @@ export async function POST(request: NextRequest) {
                     folder: cleanFolder
                 }
             }
-        });
+        }, { headers: corsHeaders });
 
     } catch (error) {
         console.error('Public upload error:', error);
@@ -115,25 +122,25 @@ export async function POST(request: NextRequest) {
             if (error.message.includes('Bad credentials')) {
                 return NextResponse.json(
                     { error: 'Invalid GitHub token' },
-                    { status: 401 }
+                    { status: 401, headers: corsHeaders }
                 );
             }
             if (error.message.includes('Not Found')) {
                 return NextResponse.json(
                     { error: 'Repository not found or insufficient permissions' },
-                    { status: 404 }
+                    { status: 404, headers: corsHeaders }
                 );
             }
 
             return NextResponse.json(
                 { error: `Upload failed: ${error.message}` },
-                { status: 500 }
+                { status: 500, headers: corsHeaders }
             );
         }
 
         return NextResponse.json(
             { error: 'Upload failed: Unknown error' },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }
