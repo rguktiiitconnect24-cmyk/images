@@ -141,7 +141,7 @@ export async function POST(request) {
 In your actual app's `.env.local` file, make sure you have the exact same variables we just set up:
 
 ```env
-GITHUB_TOKEN=your_github_personal_access_token_here
+GITHUB_TOKEN=your_github_token_here
 GITHUB_OWNER=rguktiiitconnect24-cmyk
 GITHUB_REPO=images
 ```
