@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
         if (!file) {
             return NextResponse.json(
                 { error: 'No file provided' },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         if (!file.type.startsWith('image/')) {
             return NextResponse.json(
                 { error: 'Only image files are allowed' },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
         if (file.size > 100 * 1024 * 1024) {
             return NextResponse.json(
                 { error: 'File size must be less than 100MB' },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -98,13 +98,13 @@ export async function POST(request: NextRequest) {
         if (error instanceof Error) {
             return NextResponse.json(
                 { error: `Upload failed: ${error.message}` },
-                { status: 500 }
+                { status: 500, headers: corsHeaders }
             );
         }
 
         return NextResponse.json(
             { error: 'Upload failed: Unknown error' },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }
