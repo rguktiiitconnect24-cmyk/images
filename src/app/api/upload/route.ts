@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Octokit } from '@octokit/rest';
 
+// Standard CORS headers
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
 export const runtime = "edge";
 
 
@@ -83,7 +90,7 @@ export async function POST(request: NextRequest) {
             type: file.type,
             commit_sha: commitSha,
             github_url: response.data.content?.html_url,
-        });
+        }, { headers: corsHeaders });
 
     } catch (error) {
         console.error('Upload error:', error);
@@ -108,5 +115,9 @@ export async function GET() {
         methods: ['POST'],
         maxFileSize: '100MB',
         allowedTypes: ['image/*'],
-    });
+    }, { headers: corsHeaders });
+}
+
+export async function OPTIONS() {
+    return NextResponse.json({}, { headers: corsHeaders });
 }
